@@ -63,7 +63,7 @@
         </fieldset>
         <div class="form-actions">
           <button type="submit" class="btn btn-block btn-lg btn-danger">
-            <small>登  	陆</small>
+            <small>注  册/small>
           </button>
           <div class="forgot"><a class="forgot" href="#"></a></div>
         </div>

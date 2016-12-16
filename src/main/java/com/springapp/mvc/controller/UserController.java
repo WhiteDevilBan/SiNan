@@ -17,6 +17,11 @@ public class UserController {
     @RequestMapping("/login.do")
     public ModelAndView login(String email, String password) {
         ModelAndView mv = new ModelAndView("index");
+        if (userService.valid(email, password)) {
+            System.out.println("login success");
+        } else {
+            System.out.println("login failed");
+        }
         mv.addObject("message", "Hello" + email + password);
         return mv;
     }

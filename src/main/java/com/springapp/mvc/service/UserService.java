@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-//    @Autowired
-//    private UserDao userDao;
+    @Autowired
+    private UserDao userDao;
+
+
+    public boolean valid(String email, String password) {
+        userDao.valid(email,password);
+        return true;
+    }
 }
