@@ -1,8 +1,9 @@
 package com.springapp.mvc.dao;
 
 
+import com.springapp.mvc.domain.User;
 import com.springapp.mvc.util.MyBatisRepository;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * Created by Administrator on 2016/12/16.
@@ -10,5 +11,5 @@ import org.springframework.stereotype.Component;
 @MyBatisRepository
 public interface UserDao {
 
-    boolean valid(String email, String password);
+    User valid(@Param("email")String email, @Param("password")String password);
 }

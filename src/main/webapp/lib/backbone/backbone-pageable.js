@@ -241,9 +241,9 @@
        If you want to initialize a collection to a different state than the
        default, you can specify them in `options.state`. Any state parameters
        supplied will be merged with the default. If you want to change the
-       default mapping from #state keys to your server API's query parameter
+       default mapper from #state keys to your server API's query parameter
        names, you can specifiy an object hash in `option.queryParams`. Likewise,
-       any mapping provided will be merged with the default. Lastly, all
+       any mapper provided will be merged with the default. Lastly, all
        Backbone.Collection constructor options are also accepted.
 
        See:

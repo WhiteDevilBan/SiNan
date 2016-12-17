@@ -15,7 +15,9 @@ public class UserService {
 
 
     public boolean valid(String email, String password) {
-        userDao.valid(email,password);
-        return true;
+        if(password.equals(userDao.valid(email,password).getPassword())){
+            return true;
+        }
+        return false;
     }
 }

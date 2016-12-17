@@ -53,7 +53,7 @@
                     <button type="submit" class="btn btn-block btn-lg btn-danger">
                         <small>登  	陆</small>
                     </button>
-                    <div class="forgot"><a class="forgot" href="#"></a></div>
+                    <div class="forgot"><a class="register" href="regist">欢迎注册</a></div>
                 </div>
             </form>
         </div>

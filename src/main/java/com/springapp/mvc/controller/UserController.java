@@ -22,7 +22,7 @@ public class UserController {
         } else {
             System.out.println("login failed");
         }
-        mv.addObject("message", "Hello" + email + password);
+        mv.addObject("message", "Hello " + email + " " + password);
         return mv;
     }
 
