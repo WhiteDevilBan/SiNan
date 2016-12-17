@@ -30,7 +30,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
                         <div class="well no-padding">
 
-                            <form action="php/demo-register.php" id="smart-form-register"
+                            <form action="/user/regist.do" id="smart-form-register"
                                   class="smart-form client-form">
                                 <header>
                                     Registration is FREE
@@ -39,7 +39,7 @@
                                 <fieldset style="width: 430px">
                                     <section>
                                         <label class="input"> <i class="icon-append fa fa-user"></i>
-                                            <input type="text" name="username" placeholder="Username">
+                                            <input type="text" name="name" placeholder="Username">
                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b>
                                         </label>
                                     </section>

@@ -28,8 +28,8 @@ public class UserController {
 
     @RequestMapping("/regist.do")
     public ModelAndView regist(User user) {
-        ModelAndView mv = new ModelAndView("login");
-
+        ModelAndView mv = new ModelAndView("redirect:/login");
+        userService.regist(user);
         return mv;
     }
 }

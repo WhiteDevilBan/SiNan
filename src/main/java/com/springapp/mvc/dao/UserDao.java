@@ -12,4 +12,6 @@ import org.apache.ibatis.annotations.Param;
 public interface UserDao {
 
     User valid(@Param("email")String email, @Param("password")String password);
+
+    void regist(User user);
 }

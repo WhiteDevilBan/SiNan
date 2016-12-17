@@ -1,6 +1,7 @@
 package com.springapp.mvc.service;
 
 import com.springapp.mvc.dao.UserDao;
+import com.springapp.mvc.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,9 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public void regist(User user) {
+        userDao.regist(user);
     }
 }

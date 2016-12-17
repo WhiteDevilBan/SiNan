@@ -15,7 +15,7 @@ public class JspController {
 
     @RequestMapping("{url}")
     public String redirect(@PathVariable String url){
-//        System.out.println(url);
+        System.out.println(url);
         return url;
     }
 
