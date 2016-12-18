@@ -5,7 +5,7 @@
 <mapper namespace="com.springapp.mvc.dao.UserDao">
 
         <select id="valid" parameterType="map" resultType="com.springapp.mvc.domain.User">
-            SELECT * from user where email = #{email}
+            SELECT * from user where email = #{email} limit 1
         </select>
 
         <insert id="regist" parameterType="com.springapp.mvc.domain.User">

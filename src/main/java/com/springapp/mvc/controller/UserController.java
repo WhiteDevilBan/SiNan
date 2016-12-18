@@ -16,13 +16,14 @@ public class UserController {
 
     @RequestMapping("/login.do")
     public ModelAndView login(String email, String password) {
-        ModelAndView mv = new ModelAndView("index");
+        ModelAndView mv;
         if (userService.valid(email, password)) {
+            mv = new ModelAndView("redirect:../index");
             System.out.println("login success");
         } else {
+            mv = new ModelAndView("redirect:/login");
             System.out.println("login failed");
         }
-        mv.addObject("message", "Hello " + email + " " + password);
         return mv;
     }
 
