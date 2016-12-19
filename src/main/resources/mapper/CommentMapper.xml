@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.springapp.mvc.dao.CommentDao">
+
+    <select id="getCommentCount" parameterType="java.lang.Integer">
+        SELECT count(1) from comment where type = #{type}
+    </select>
+
+    <select id="getCommentList" resultType="com.springapp.mvc.domain.Comment">
+        SELECT
+        id as id,
+        content as content,
+        author as author,
+        comment_time as commentTime,
+        score as score
+        from comment where id between 100 and 200 ORDER BY comment_time DESC
+    </select>
+</mapper>

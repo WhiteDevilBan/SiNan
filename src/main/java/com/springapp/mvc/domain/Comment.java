@@ -17,5 +17,5 @@ public class Comment {
     private int score;
     private String store;
     private String gameName;
-
+    private String commentTimeStr;
 }

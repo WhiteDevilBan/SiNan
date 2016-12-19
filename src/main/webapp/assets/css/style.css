@@ -2180,13 +2180,13 @@ Chats
 
 .chats li .name {
   color:#3590c1;
-  font-size: 13px;
+  font-size: 24px;
   font-weight: 400;
 }
 
 .chats li .datetime {
   color:#333;
-  font-size: 13px;
+  font-size: 24px;
   font-weight: 400;
 }
 
@@ -2244,7 +2244,8 @@ Chats
 }
 
 .chats li .message .body {
-  display: block; 
+  display: block;
+  font-size: 24px;
 }
 
 .chat-form {

@@ -17,5 +17,7 @@ public class Parameter {
     private String store;
     private int star;
     private String word;
+    private int pageNo;
+    private int perPageNo;
 
 }
