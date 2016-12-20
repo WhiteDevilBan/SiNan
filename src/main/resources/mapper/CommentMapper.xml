@@ -16,6 +16,12 @@
 
     </select>
 
+    <select id="getCommentCountWithoutTime" parameterType="com.springapp.mvc.domain.Parameter" resultType="java.lang.Integer">
+        SELECT count(1) FROM comment
+        where game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
+        GROUP BY type
+    </select>
+
     <select id="getCommentList" parameterType="com.springapp.mvc.domain.Parameter"
             resultType="com.springapp.mvc.domain.Comment">
         SELECT

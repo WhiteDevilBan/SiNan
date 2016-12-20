@@ -11,7 +11,7 @@ import java.util.Date;
 public class Parameter {
 
     private String gameName;
-    private int type;//1:好评，2:差评
+    private int type=0;//1:好评，2:差评
     private String startTime;
     private String endTime;
     private String store;

@@ -41,4 +41,8 @@ public class CommentService {
     public List<Integer> getCommentStarCount(Parameter parameter) {
         return commentDao.getCommentStarCount(parameter);
     }
+
+    public List<Integer> getCommentCountWithoutTime(Parameter parameter) {
+        return commentDao.getCommentCountWithoutTime(parameter);
+    }
 }
