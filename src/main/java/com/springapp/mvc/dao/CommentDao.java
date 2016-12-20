@@ -1,6 +1,7 @@
 package com.springapp.mvc.dao;
 
 import com.springapp.mvc.domain.Comment;
+import com.springapp.mvc.domain.Parameter;
 import com.springapp.mvc.util.MyBatisRepository;
 
 import java.util.List;
@@ -10,7 +11,10 @@ import java.util.List;
  */
 @MyBatisRepository
 public interface CommentDao {
-    int getCommentCount(int type);
+    int getCommentCount(Parameter param);
 
-    List<Comment> getCommentList();
+    List<Comment> getCommentList(Parameter param);
+
+    int getTotalCount(Parameter param);
+
 }

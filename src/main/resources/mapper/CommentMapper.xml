@@ -4,17 +4,39 @@
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="com.springapp.mvc.dao.CommentDao">
 
-    <select id="getCommentCount" parameterType="java.lang.Integer">
-        SELECT count(1) from comment where type = #{type}
+    <select id="getCommentCount" parameterType="com.springapp.mvc.domain.Parameter" resultType="java.lang.Integer">
+        SELECT count(1) from comment
+        where comment_time BETWEEN #{startTime} and #{endTime}
+        <if test="type != 0">
+            and type = #{type}
+        </if>
+        <if test="gameName != null">
+            and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
+        </if>
+
     </select>
 
-    <select id="getCommentList" resultType="com.springapp.mvc.domain.Comment">
+    <select id="getCommentList" parameterType="com.springapp.mvc.domain.Parameter"
+            resultType="com.springapp.mvc.domain.Comment">
         SELECT
         id as id,
         content as content,
         author as author,
         comment_time as commentTime,
         score as score
-        from comment where id between 100 and 200 ORDER BY comment_time DESC
+        from comment
+        where 1=1
+        <if test="type != 0">
+            and type = #{type}
+        </if>
+        <if test="gameName != null">
+            and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
+        </if>
+        limit #{perPageNo} offset #{offset}
     </select>
+
+    <select id="getTotalCount" parameterType="com.springapp.mvc.domain.Parameter" resultType="java.lang.Integer">
+        SELECT count(1) FROM  comment
+    </select>
+
 </mapper>

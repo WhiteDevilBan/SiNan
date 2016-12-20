@@ -11,13 +11,13 @@ import java.util.Date;
 public class Parameter {
 
     private String gameName;
-    private String type;//好评，差评
-    private Date startTime;
-    private Date endTime;
+    private int type;//1:好评，2:差评
+    private String startTime;
+    private String endTime;
     private String store;
     private int star;
     private String word;
-    private int pageNo;
-    private int perPageNo;
-
+    private int pageNo = 1;
+    private int perPageNo = 10;
+    private int offset =0;
 }

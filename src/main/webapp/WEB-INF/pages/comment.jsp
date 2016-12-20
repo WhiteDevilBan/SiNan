@@ -1,10 +1,13 @@
+<%@ page import="com.springapp.mvc.domain.Comment" %>
+<%@ page import="com.springapp.mvc.domain.Parameter" %>
 <%@ page import="com.springapp.mvc.service.CommentService" %>
+<%@ page import="com.springapp.mvc.util.DateUtil" %>
 <%@ page import="org.springframework.context.ApplicationContext" %>
 <%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%@ page import="com.springapp.mvc.domain.Comment" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg" %>
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8"/>
@@ -39,17 +42,59 @@
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(application);
         CommentService service = context.getBean(CommentService.class);
-//        int goodCommentCount = service.getCommentCount(1);
-//        int badCommentCount = service.getCommentCount(2);
-        List<Comment> commentList = service.getCommentList();
-        request.setAttribute("commentList",commentList);
+        Parameter param = new Parameter();
+        String gameName = request.getParameter("gameName");
+        String store = request.getParameter("store");
+        param.setGameName(gameName);
+        param.setStore(store);
+        String type = request.getParameter("type");
+        String pageNoStr = request.getParameter("pageNo");
+        int pageNo = pageNoStr == null ? 1 : Integer.parseInt(pageNoStr);
+        param.setPageNo(pageNo);
+        param.setOffset((pageNo - 1) * 10);
+        String startTime = request.getParameter("start");
+        String endTime = request.getParameter("end");
+        if (startTime == null) {
+            startTime = DateUtil.format(DateUtil.addDay(DateUtil.parse(DateUtil.getNow()), -1));
+        } else {
+            startTime = DateUtil.getDateStr(startTime);
+        }
+        if (endTime == null) {
+            endTime = DateUtil.getNow();//yestoday
+        } else {
+            endTime = DateUtil.getDateStr(endTime);
+        }
 
+        param.setStartTime(startTime);
+        param.setEndTime(endTime);
+
+        int goodCommentCount = 0;
+        int badCommentCount = 0;
+        if (type == null) {
+            param.setType(1);
+            goodCommentCount = service.getCommentCount(param);
+            param.setType(2);
+            badCommentCount = service.getCommentCount(param);
+        } else if (type.equals("2")) {
+            param.setType(2);
+            badCommentCount = service.getCommentCount(param);
+        } else if (type.equals("1")) {
+            param.setType(1);
+            goodCommentCount = service.getCommentCount(param);
+        }
+        List<Comment> commentList = service.getCommentList(param);
+//        int totalCount = service.getTotalCount(param);
+        request.setAttribute("commentList", commentList);
+
+        String href;
+        if(gameName==null){
+            href="comment?";
+        } else {
+            href = "comment?gameName="+gameName+"&store="+store;
+        }
     %>
 </head>
-<!-- END HEAD -->
-<!-- BEGIN BODY -->
 <body class="page-header-fixed">
-<!-- BEGIN HEADER -->
 <div class="header navbar navbar-inverse navbar-fixed-top">
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="header-inner">
@@ -81,21 +126,16 @@
         </ul>
     </div>
 </div>
-<!-- END HEADER -->
 <div class="clearfix"></div>
-<!-- BEGIN CONTAINER -->
 <div class="page-container">
-    <!-- BEGIN SIDEBAR -->
     <div class="page-sidebar navbar-collapse collapse">
-        <!-- BEGIN SIDEBAR MENU -->
         <ul class="page-sidebar-menu">
             <li>
                 <!-- 隐藏菜单 -->
                 <div class="sidebar-toggler hidden-phone"></div>
-                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
             </li>
             <li class="start active ">
-                <a href="index.html">
+                <a href="index">
                     <i class="fa fa-home"></i>
                     <span class="title">Dashboard</span>
                     <span class="selected"></span>
@@ -111,69 +151,6 @@
         </ul>
     </div>
     <div class="page-content">
-        <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title">Modal title</h4>
-                    </div>
-                    <div class="modal-body">
-                        Widget settings form goes here
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn blue">Save changes</button>
-                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="theme-panel hidden-xs hidden-sm">
-            <div class="toggler"></div>
-            <div class="toggler-close"></div>
-            <div class="theme-options">
-                <div class="theme-option theme-colors clearfix">
-                    <span>THEME COLOR</span>
-                    <ul>
-                        <li class="color-black current color-default" data-style="default"></li>
-                        <li class="color-blue" data-style="blue"></li>
-                        <li class="color-brown" data-style="brown"></li>
-                        <li class="color-purple" data-style="purple"></li>
-                        <li class="color-grey" data-style="grey"></li>
-                        <li class="color-white color-light" data-style="light"></li>
-                    </ul>
-                </div>
-                <div class="theme-option">
-                    <span>Layout</span>
-                    <select class="layout-option form-control input-small">
-                        <option value="fluid" selected="selected">Fluid</option>
-                        <option value="boxed">Boxed</option>
-                    </select>
-                </div>
-                <div class="theme-option">
-                    <span>Header</span>
-                    <select class="header-option form-control input-small">
-                        <option value="fixed" selected="selected">Fixed</option>
-                        <option value="default">Default</option>
-                    </select>
-                </div>
-                <div class="theme-option">
-                    <span>Sidebar</span>
-                    <select class="sidebar-option form-control input-small">
-                        <option value="fixed">Fixed</option>
-                        <option value="default" selected="selected">Default</option>
-                    </select>
-                </div>
-                <div class="theme-option">
-                    <span>Footer</span>
-                    <select class="footer-option form-control input-small">
-                        <option value="fixed">Fixed</option>
-                        <option value="default" selected="selected">Default</option>
-                    </select>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <h3 class="page-title">
@@ -183,13 +160,35 @@
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="index.html">Home</a>
+                        <a href="index">Home</a>
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li><a href="#">Dashboard</a></li>
+
+                    <div class="form-group col-2 pull-right">
+                        <button type="button" class="btn blue" style="height: 30px" onclick="location.href='?gameName='+document.getElementById('gameName').value+
+                        '&store='+document.getElementById('store').value">查看</button>
+                    </div>
+                    <div class="form-group col-1 pull-right">
+                        <select class="form-control input-sm" id="gameName">
+                            <option value="皇室战争" selected>皇室战争</option>
+                            <option value="王者荣耀">王者荣耀</option>
+                            <option value="梦幻西游">梦幻西游</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-1 pull-right">
+                        <select class="form-control input-sm" id="store">
+                            <option value="meizu" selected>魅族应用中心</option>
+                            <option value="qq">应用宝</option>
+                            <option value="Apple Store">Apple Store</option>
+                        </select>
+                    </div>
+
                 </ul>
             </div>
         </div>
+
+        <%--评论数，正文从这开始--%>
         <div class="row">
 
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -199,15 +198,15 @@
                     </div>
                     <div class="details">
                         <div class="number">
-                            29
-                            <%--<%=goodCommentCount%>--%>
+                            <%--29--%>
+                            <%=goodCommentCount%>
                             <!-- 好评数-->
                         </div>
                         <div class="desc">
                             Yestoday's Good Comments
                         </div>
                     </div>
-                    <a class="more" href="comment">
+                    <a class="more" href="<%=href%>&type=1">
                         查看更多... <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
@@ -219,15 +218,15 @@
                     </div>
                     <div class="details">
                         <div class="number">
-                            22
-                            <%--<%=badCommentCount%>--%>
+                            <%--22--%>
+                            <%=badCommentCount%>
                             <!-- 差评数-->
                         </div>
                         <div class="desc">
                             Yestoday's Bad Comments
                         </div>
                     </div>
-                    <a class="more" href="comment">
+                    <a class="more" href="<%=href%>&type=2">
                         查看更多... <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
@@ -236,20 +235,14 @@
         </div>
         <div class="row ">
             <div class="col-md-6 col-sm-6">
-                <!-- BEGIN PORTLET-->
                 <div class="portlet">
                     <div class="portlet-title line">
                         <div class="caption"><i class="fa fa-comments"></i>Comments</div>
-                        <div class="tools">
-                            <a href="" class="collapse"></a>
-                            <a href="#portlet-config" data-toggle="modal" class="config"></a>
-                            <a href="" class="reload"></a>
-                            <a href="" class="remove"></a>
-                        </div>
                     </div>
                     <div class="portlet-body" id="chats">
                         <div class="scroller" style="height: 700px;" data-always-visible="1" data-rail-visible1="1">
                             <ul class="chats">
+                                <%--<pg:pager items="<%=totalCount%>" index="center" maxPageItems="10" maxIndexPages="10">--%>
                                 <c:forEach items="${commentList}" var="comment">
                                     <li class="in">
                                         <img class="avatar img-responsive" alt="" src="assets/img/avatar1.jpg"/>
@@ -258,13 +251,40 @@
                                             <span class="arrow"></span>
                                             <a href="#" class="name">${comment.author}</a>
                                             <span class="datetime"> @ ${comment.commentTimeStr}</span>
-                                            <span class="score" style="float: right;font-size: 24px">${comment.score/10}星</span>
+                                                <span class="score"
+                                                      style="float: right;font-size: 24px">${comment.score/10}星</span>
 											<span class="body">
-                                                ${comment.content}
-											</span>
+                                                    ${comment.content}
+                                            </span>
                                         </div>
                                     </li>
                                 </c:forEach>
+
+                                <%--<pg:index>--%>
+                                <%--<pg:first>--%>
+                                <%--<a href="comment">首页</a>--%>
+                                <%--</pg:first>--%>
+                                <%--<pg:prev>--%>
+                                <%--<a href="comment">上一页</a>--%>
+                                <%--</pg:prev>--%>
+                                <%--<pg:pages>--%>
+                                <%--<c:choose>--%>
+                                <%--<c:when test="${pageNumber eq currentPageNumber}">--%>
+                                <%--<font color="red">[<%=pageNumber%>]</font>--%>
+                                <%--</c:when>--%>
+                                <%--<c:otherwise>--%>
+                                <%--<a href="comment?&pageNo=<%=pageNumber%>"><%=pageNumber%></a>--%>
+                                <%--</c:otherwise>--%>
+                                <%--</c:choose>--%>
+                                <%--</pg:pages>--%>
+                                <%--<pg:next>--%>
+                                <%--<a href="<%=pageUrl%>">下一页</a>--%>
+                                <%--</pg:next>--%>
+                                <%--<pg:last>--%>
+                                <%--<a href="comment">尾页</a>--%>
+                                <%--</pg:last>--%>
+                                <%--</pg:index>--%>
+                                <%--</pg:pager>--%>
                             </ul>
                         </div>
                     </div>
@@ -278,8 +298,6 @@
     </div>
     <!-- END PAGE -->
 </div>
-<!-- END CONTAINER -->
-<!-- BEGIN FOOTER -->
 <div class="footer">
     <div class="footer-inner">
         CopyRight by Bzz.
@@ -290,10 +308,7 @@
 			</span>
     </div>
 </div>
-<!-- END FOOTER -->
-<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-<!-- BEGIN CORE PLUGINS -->
-<!--[if lt IE 9]>
+
 <script src="assets/plugins/respond.min.js"></script>
 <script src="assets/plugins/excanvas.min.js"></script>
 <![endif]-->
