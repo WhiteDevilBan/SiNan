@@ -38,4 +38,7 @@ public class CommentService {
     }
 
 
+    public List<Integer> getCommentStarCount(Parameter parameter) {
+        return commentDao.getCommentStarCount(parameter);
+    }
 }

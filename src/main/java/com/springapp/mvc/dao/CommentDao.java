@@ -17,4 +17,5 @@ public interface CommentDao {
 
     int getTotalCount(Parameter param);
 
+    List<Integer> getCommentStarCount(Parameter parameter);
 }
