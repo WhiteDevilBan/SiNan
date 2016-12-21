@@ -3,11 +3,13 @@ package com.springapp.mvc.service;
 import com.springapp.mvc.dao.CommentDao;
 import com.springapp.mvc.domain.Comment;
 import com.springapp.mvc.domain.CommentCount;
+import com.springapp.mvc.domain.FeelingEntry;
 import com.springapp.mvc.domain.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,8 +41,26 @@ public class CommentService {
     }
 
 
-    public List<Integer> getCommentCountWithoutTime(Parameter parameter) {
-        return commentDao.getCommentCountWithoutTime(parameter);
+    public List<CommentCount> getCommentCountWithoutTime(Parameter parameter) {
+
+        List<String> list = new ArrayList();
+        list.add("meizu");
+        list.add("qq");
+        list.add("Apple Store");
+        List<CommentCount> result = new ArrayList();
+        for(String store:list){
+            parameter.setStore(store);
+            List<Integer> l = commentDao.getCommentCountWithoutTime(parameter);
+            CommentCount count = new CommentCount();
+            count.setStore(store);
+            if(l.size()>0){
+                count.setGoodCount(l.get(0));
+                count.setBadCount(l.get(1));
+            }
+            result.add(count);
+        }
+
+        return result;
     }
 
     public CommentCount getCommentStarCount(Parameter parameter) {
@@ -53,5 +73,9 @@ public class CommentService {
         commentCount.setCount4(starList.get(3));
         commentCount.setCount5(starList.get(4));
         return commentCount;
+    }
+
+    public List<FeelingEntry> getFeelingLineCount(Parameter parameter){
+        return commentDao.getFeelingLineCount(parameter);
     }
 }

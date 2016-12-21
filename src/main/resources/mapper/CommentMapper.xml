@@ -18,7 +18,7 @@
 
     <select id="getCommentCountWithoutTime" parameterType="com.springapp.mvc.domain.Parameter" resultType="java.lang.Integer">
         SELECT count(1) FROM comment
-        where game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
+        where comment_time BETWEEN #{startTime} and #{endTime} and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
         GROUP BY type
     </select>
 
@@ -53,5 +53,18 @@
             and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
         </if>
         GROUP BY score
+    </select>
+
+    <select id="getFeelingLineCount" parameterType="com.springapp.mvc.domain.Parameter" resultType="com.springapp.mvc.domain.FeelingEntry">
+        select
+        DATE_FORMAT(comment_time,'%m-%d') as commentTime,
+        type,
+        count(1) as count
+        from comment
+        where comment_time BETWEEN CURRENT_DATE -7 and CURRENT_DATE
+        <if test="gameName != null">
+            and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
+        </if>
+        GROUP BY DATE_FORMAT(comment_time,'%m-%d'),type
     </select>
 </mapper>

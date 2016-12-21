@@ -1,6 +1,7 @@
 package com.springapp.mvc.dao;
 
 import com.springapp.mvc.domain.Comment;
+import com.springapp.mvc.domain.FeelingEntry;
 import com.springapp.mvc.domain.Parameter;
 import com.springapp.mvc.util.MyBatisRepository;
 
@@ -20,4 +21,6 @@ public interface CommentDao {
     List<Integer> getCommentStarCount(Parameter parameter);
 
     List<Integer> getCommentCountWithoutTime(Parameter parameter);
+
+    List<FeelingEntry> getFeelingLineCount(Parameter parameter);
 }

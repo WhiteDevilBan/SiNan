@@ -31,24 +31,7 @@ public class CommentController {
 
     @RequestMapping("/getCommentCount.json")
     public @ResponseBody List<CommentCount> getCommentCount(Parameter parameter){
-        List<String> list = new ArrayList();
-        list.add("meizu");
-        list.add("qq");
-        list.add("Apple Store");
-        List<CommentCount> result = new ArrayList();
-        for(String store:list){
-            parameter.setStore(store);
-            List<Integer> l = service.getCommentCountWithoutTime(parameter);
-            CommentCount count = new CommentCount();
-            count.setStore(store);
-            if(l.size()>0){
-                count.setGoodCount(l.get(0));
-                count.setBadCount(l.get(1));
-            }
-            result.add(count);
-        }
-
-        return result;
+        return service.getCommentCountWithoutTime(parameter);
     }
 
     @RequestMapping("/getCommentStarCount.json")
