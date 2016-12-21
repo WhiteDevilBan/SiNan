@@ -1,4 +1,5 @@
 <%@ page import="com.springapp.mvc.domain.Comment" %>
+<%@ page import="com.springapp.mvc.domain.CommentCount" %>
 <%@ page import="com.springapp.mvc.domain.Parameter" %>
 <%@ page import="com.springapp.mvc.service.CommentService" %>
 <%@ page import="com.springapp.mvc.util.DateUtil" %>
@@ -17,19 +18,14 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <meta name="MobileOptimized" content="320">
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
     <link href="assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" type="text/css"/>
     <link href="assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
     <link href="assets/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
     <link href="assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
     <link href="assets/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"/>
-    <!-- END PAGE LEVEL PLUGIN STYLES -->
-    <!-- BEGIN THEME STYLES -->
     <link href="assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/style.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
@@ -37,7 +33,6 @@
     <link href="assets/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
     <link href="assets/css/custom.css" rel="stylesheet" type="text/css"/>
-    <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="img/favicon.ico"/>
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(application);
@@ -83,18 +78,23 @@
             goodCommentCount = service.getCommentCount(param);
         }
         List<Comment> commentList = service.getCommentList(param);
-//        int totalCount = service.getTotalCount(param);
+        int totalCount = goodCommentCount+badCommentCount;
         request.setAttribute("commentList", commentList);
 
         String href;
-        if(gameName==null){
-            href="comment?";
+        if (gameName == null) {
+            href = "comment?";
         } else {
-            href = "comment?gameName="+gameName+"&store="+store;
+            href = "comment?gameName=" + gameName + "&store=" + store;
         }
+
+        CommentCount star = service.getCommentStarCount(param);
+
+
     %>
 </head>
 <body class="page-header-fixed">
+
 <div class="header navbar navbar-inverse navbar-fixed-top">
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="header-inner">
@@ -167,7 +167,8 @@
 
                     <div class="form-group col-2 pull-right">
                         <button type="button" class="btn blue" style="height: 30px" onclick="location.href='?gameName='+document.getElementById('gameName').value+
-                        '&store='+document.getElementById('store').value">查看</button>
+                        '&store='+document.getElementById('store').value">查看
+                        </button>
                     </div>
                     <div class="form-group col-1 pull-right">
                         <select class="form-control input-sm" id="gameName">
@@ -242,57 +243,56 @@
                     <div class="portlet-body" id="chats">
                         <div class="scroller" style="height: 700px;" data-always-visible="1" data-rail-visible1="1">
                             <ul class="chats">
-                                <%--<pg:pager items="<%=totalCount%>" index="center" maxPageItems="10" maxIndexPages="10">--%>
-                                <c:forEach items="${commentList}" var="comment">
-                                    <li class="in">
-                                        <img class="avatar img-responsive" alt="" src="assets/img/avatar1.jpg"/>
+                                <pg:pager items="100" maxIndexPages="10" maxPageItems="10">
+                                    <c:forEach items="${commentList}" var="comment">
+                                        <li class="in">
+                                            <img class="avatar img-responsive" alt="" src="assets/img/avatar1.jpg"/>
 
-                                        <div class="message">
-                                            <span class="arrow"></span>
-                                            <a href="#" class="name">${comment.author}</a>
-                                            <span class="datetime"> @ ${comment.commentTimeStr}</span>
+                                            <div class="message">
+                                                <span class="arrow"></span>
+                                                <a href="#" class="name">${comment.author}</a>
+                                                <span class="datetime"> @ ${comment.commentTimeStr}</span>
                                                 <span class="score"
                                                       style="float: right;font-size: 24px">${comment.score/10}星</span>
 											<span class="body">
                                                     ${comment.content}
                                             </span>
-                                        </div>
-                                    </li>
-                                </c:forEach>
-
-                                <%--<pg:index>--%>
-                                <%--<pg:first>--%>
-                                <%--<a href="comment">首页</a>--%>
-                                <%--</pg:first>--%>
-                                <%--<pg:prev>--%>
-                                <%--<a href="comment">上一页</a>--%>
-                                <%--</pg:prev>--%>
-                                <%--<pg:pages>--%>
-                                <%--<c:choose>--%>
-                                <%--<c:when test="${pageNumber eq currentPageNumber}">--%>
-                                <%--<font color="red">[<%=pageNumber%>]</font>--%>
-                                <%--</c:when>--%>
-                                <%--<c:otherwise>--%>
-                                <%--<a href="comment?&pageNo=<%=pageNumber%>"><%=pageNumber%></a>--%>
-                                <%--</c:otherwise>--%>
-                                <%--</c:choose>--%>
-                                <%--</pg:pages>--%>
-                                <%--<pg:next>--%>
-                                <%--<a href="<%=pageUrl%>">下一页</a>--%>
-                                <%--</pg:next>--%>
-                                <%--<pg:last>--%>
-                                <%--<a href="comment">尾页</a>--%>
-                                <%--</pg:last>--%>
-                                <%--</pg:index>--%>
-                                <%--</pg:pager>--%>
+                                            </div>
+                                        </li>
+                                    </c:forEach>
+                                    <pg:index>
+                                        <pg:first>
+                                            <a href="comment">首页</a>
+                                        </pg:first>
+                                        <pg:prev>
+                                            <a href="comment">上一页</a>
+                                        </pg:prev>
+                                        <pg:pages>
+                                            <c:choose>
+                                                <c:when test="${pageNumber eq currentPageNumber}">
+                                                    <%=pageNumber%>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="comment?&pageNo=<%=pageNumber%>"><%=pageNumber%>
+                                                    </a>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </pg:pages>
+                                        <pg:next>
+                                            <a href="<%=pageUrl%>">下一页</a>
+                                        </pg:next>
+                                        <pg:last>
+                                            <a href="comment">尾页</a>
+                                        </pg:last>
+                                    </pg:index>
+                                </pg:pager>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- END PORTLET-->
             </div>
-            <div class="col-md-6 col-sm-6">
-                <h2>这里还差个图表--->按应用商店显示昨日评论数(总数，好评，差评)</h2>
+            <div class="col-md-6 col-sm-6" id="starBar" style="height: 600px">
             </div>
         </div>
     </div>
@@ -309,12 +309,49 @@
     </div>
 </div>
 
+<script src="js/echarts-2.2.7/src/echarts-all.js"></script>
+<script type="text/javascript">
+    var starBar = echarts.init(document.getElementById('starBar'));
+    var option = {
+        title: {
+            text: '各评分分布',
+            subtext: ''
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['评分数量']
+        },
+
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                data: ['一星', '二星', '三星', '四星', '五星']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '评分量',
+                type: 'bar',
+                data: [<%=star.getCount1()%>, <%=star.getCount2()%>, <%=star.getCount3()%>, <%=star.getCount4()%>, <%=star.getCount5()%>]
+            }
+        ]
+    };
+    starBar.setOption(option);
+</script>
+
 <script src="assets/plugins/respond.min.js"></script>
 <script src="assets/plugins/excanvas.min.js"></script>
 <![endif]-->
 <script src="assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
 <script src="assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
-<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 <script src="assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
 <script src="assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js"
@@ -323,8 +360,6 @@
 <script src="assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>
 <script src="assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
 <script src="assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<!-- END CORE PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="assets/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
 <script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
 <script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
@@ -338,16 +373,12 @@
 <script src="assets/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
 <script src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
 <script src="assets/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
-<!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
 <script src="assets/plugins/fullcalendar/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
 <script src="assets/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.js" type="text/javascript"></script>
 <script src="assets/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="assets/scripts/app.js" type="text/javascript"></script>
 <script src="assets/scripts/index.js" type="text/javascript"></script>
 <script src="assets/scripts/tasks.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function () {
         App.init(); // initlayout and core plugins
@@ -362,7 +393,5 @@
         Tasks.initDashboardWidget();
     });
 </script>
-<!-- END JAVASCRIPTS -->
 </body>
-<!-- END BODY -->
 </html>

@@ -206,7 +206,7 @@ public final class DateUtil {
     public static String getDateStr(String time) {
         SimpleDateFormat df = new SimpleDateFormat(FORMAT_SHORT);
         try{
-            return df.parse(time).toString();
+            return format(df.parse(time));
         } catch (Exception e){
             return null;
         }

@@ -41,8 +41,10 @@ public class CommentController {
             List<Integer> l = service.getCommentCountWithoutTime(parameter);
             CommentCount count = new CommentCount();
             count.setStore(store);
-            count.setGoodCount(l.get(0));
-            count.setBadCount(l.get(1));
+            if(l.size()>0){
+                count.setGoodCount(l.get(0));
+                count.setBadCount(l.get(1));
+            }
             result.add(count);
         }
 
@@ -51,14 +53,7 @@ public class CommentController {
 
     @RequestMapping("/getCommentStarCount.json")
     public @ResponseBody CommentCount getCommentStarCount(Parameter parameter){
-        List<Integer> starList = service.getCommentStarCount(parameter);
-        CommentCount commentCount = new CommentCount();
-        commentCount.setCount1(starList.get(0));
-        commentCount.setCount2(starList.get(1));
-        commentCount.setCount3(starList.get(2));
-        commentCount.setCount4(starList.get(3));
-        commentCount.setCount5(starList.get(4));
-        return commentCount;
+        return service.getCommentStarCount(parameter);
     }
 
 }

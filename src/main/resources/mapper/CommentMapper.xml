@@ -48,7 +48,7 @@
     <select id="getCommentStarCount" parameterType="com.springapp.mvc.domain.Parameter" resultType="java.lang.Integer">
         SELECT count(1)
         FROM comment
-        where 1=1
+        where comment_time BETWEEN #{startTime} and #{endTime}
         <if test="gameName != null">
             and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
         </if>

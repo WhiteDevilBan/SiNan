@@ -2,6 +2,7 @@ package com.springapp.mvc.service;
 
 import com.springapp.mvc.dao.CommentDao;
 import com.springapp.mvc.domain.Comment;
+import com.springapp.mvc.domain.CommentCount;
 import com.springapp.mvc.domain.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,11 +39,19 @@ public class CommentService {
     }
 
 
-    public List<Integer> getCommentStarCount(Parameter parameter) {
-        return commentDao.getCommentStarCount(parameter);
-    }
-
     public List<Integer> getCommentCountWithoutTime(Parameter parameter) {
         return commentDao.getCommentCountWithoutTime(parameter);
+    }
+
+    public CommentCount getCommentStarCount(Parameter parameter) {
+        List<Integer> starList = commentDao.getCommentStarCount(parameter);
+        if(starList.size()>5) starList.remove(0);
+        CommentCount commentCount = new CommentCount();
+        commentCount.setCount1(starList.get(0));
+        commentCount.setCount2(starList.get(1));
+        commentCount.setCount3(starList.get(2));
+        commentCount.setCount4(starList.get(3));
+        commentCount.setCount5(starList.get(4));
+        return commentCount;
     }
 }
