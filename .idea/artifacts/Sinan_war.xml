@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" build-on-make="true" name="Sinan:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="Sinan.war">
-      <element id="artifact" artifact-name="Sinan:war exploded" />
-    </root>
-  </artifact>
-</component>
