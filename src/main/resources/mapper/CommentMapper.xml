@@ -18,7 +18,13 @@
 
     <select id="getCommentCountWithoutTime" parameterType="com.springapp.mvc.domain.Parameter" resultType="java.lang.Integer">
         SELECT count(1) FROM comment
-        where comment_time BETWEEN #{startTime} and #{endTime} and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
+        where comment_time BETWEEN #{startTime} and #{endTime} and game_id in (
+          select id from games
+          where  from_store = #{store}
+          <if test="gameName != null">
+              AND game_name = #{gameName}
+          </if>
+        )
         GROUP BY type
     </select>
 
@@ -66,5 +72,13 @@
             and game_id = (select id from games where game_name = #{gameName} and from_store = #{store})
         </if>
         GROUP BY DATE_FORMAT(comment_time,'%m-%d'),type
+    </select>
+
+    <select id="getHotWordCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select
+        count(1)
+        from comment
+        where comment_time BETWEEN CURRENT_DATE -7 and CURRENT_DATE and game_id = 3
+        and content like concat('%',#{hotWord},'%') GROUP BY DATE_FORMAT(comment_time,'%Y-%m-%d')
     </select>
 </mapper>

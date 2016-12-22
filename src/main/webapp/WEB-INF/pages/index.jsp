@@ -8,6 +8,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.springapp.mvc.domain.CommentCount" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <head>
@@ -41,6 +42,7 @@
         Parameter param = new Parameter();
         param.setType(0);
         String gameName = request.getParameter("gameName");
+        request.setAttribute("gameName",gameName);
         String store = request.getParameter("store");
         param.setGameName(gameName);
         param.setStore(store);
@@ -84,14 +86,12 @@
         }
 
         List<CommentCount> commentList = service.getCommentCountWithoutTime(param);
+        Map<String,List<Integer>> map = service.getHotWordCount();
+
     %>
 </head>
-<!-- END HEAD -->
-<!-- BEGIN BODY -->
 <body class="page-header-fixed">
-<!-- BEGIN HEADER -->
 <div class="header navbar navbar-inverse navbar-fixed-top">
-    <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="header-inner">
         <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <img src="assets/img/menu-toggler.png" alt=""/>
@@ -180,11 +180,8 @@
                         </select>
                     </div>
                 </ul>
-                <!-- END PAGE TITLE & BREADCRUMB-->
             </div>
         </div>
-        <!-- END PAGE HEADER-->
-        <!-- BEGIN DASHBOARD STATS -->
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="dashboard-stat blue">
@@ -217,44 +214,14 @@
 
         <div class="row ">
             <div class="col-md-6 col-sm-6" style="text-align: center">
-                 <img src="img/<%=gameName%>.png" height="400px">
+
+                <c:if test="${gameName != null}">
+                    <h4 class="pull-left"><b>热词词云：</b></h4>
+                    <img src="img/<%=gameName%>.png" height="400px">
+                </c:if>
             </div>
-            <div class="col-md-6 col-sm-6">
-                <div class="portlet box blue">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="fa fa-calendar"></i>Server Stats</div>
-                        <div class="tools">
-                            <a href="" class="collapse"></a>
-                            <a href="#portlet-config" data-toggle="modal" class="config"></a>
-                            <a href="" class="reload"></a>
-                            <a href="" class="remove"></a>
-                        </div>
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="sparkline-chart">
-                                    <div class="number" id="sparkline_bar"></div>
-                                    <a class="title" href="#">Network <i class="m-icon-swapright"></i></a>
-                                </div>
-                            </div>
-                            <div class="margin-bottom-10 visible-sm"></div>
-                            <div class="col-md-4">
-                                <div class="sparkline-chart">
-                                    <div class="number" id="sparkline_bar2"></div>
-                                    <a class="title" href="#">CPU Load <i class="m-icon-swapright"></i></a>
-                                </div>
-                            </div>
-                            <div class="margin-bottom-10 visible-sm"></div>
-                            <div class="col-md-4">
-                                <div class="sparkline-chart">
-                                    <div class="number" id="sparkline_line"></div>
-                                    <a class="title" href="#">Load Rate <i class="m-icon-swapright"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="col-md-6 col-sm-6" id="hotword" style="height: 400px;">
             </div>
         </div>
     </div>
@@ -273,6 +240,8 @@
     var month = new Array();
     var good = new Array();
     var bad = new Array();
+    var hotWordName = new Array();
+    var hotWordList = new Array();
     <%
         for(int i=0;i<month.size();i++){
     %>
@@ -281,12 +250,27 @@
             bad[<%=i%>] = <%=badLine.get(i)%>;
     <%
         }
+        int c = 0;
+        for(String hotWord:map.keySet()){
+    %>
+            hotWordName[<%=c%>] = '<%=hotWord%>';
+    <%
+            List<Integer> count = map.get(hotWord);
+    %>
+            var hotWord = {};
+            hotWord.name='<%=hotWord%>';
+            hotWord.type = 'line';
+            hotWord.data = <%=count%>;
+            hotWordList[<%=c%>] = hotWord;
+    <%
+            c++;
+        }
     %>
 </script>
 <script src="js/echarts-2.2.7/src/echarts-all.js"></script>
 <script type="text/javascript">
     var starBar = echarts.init(document.getElementById('feelingline'));
-    var option = {
+    var starBaroption = {
         title: {
             text: '情感走势',
             subtext: '过去一周'
@@ -314,20 +298,20 @@
             {
                 name: '好评量',
                 type: 'line',
-                data: good
+                data: bad
             },
             {
                 name: '差评量',
                 type: 'line',
-                data: bad
+                data: good
             }
         ]
     };
-    starBar.setOption(option);
+    starBar.setOption(starBaroption);
 </script>
 <script type="text/javascript">
     var bar = echarts.init(document.getElementById('storefeelingbar'))
-    var option = {
+    var baroption = {
         title: {
             text: '各应用商店情感趋势',
             subtext: ''
@@ -336,7 +320,7 @@
             trigger: 'axis'
         },
         legend: {
-            data: ['好评','差评']
+            data: ['差评','好评']
         },
         toolbox: {
             show : true,
@@ -362,18 +346,48 @@
         ],
         series: [
             {
-                name: '好评量',
+                name: '差评量',
                 type: 'bar',
                 data: [<%=commentList.get(0).getGoodCount()%>,<%=commentList.get(1).getGoodCount()%>,<%=commentList.get(2).getGoodCount()%>]
             },
             {
-                name: '差评量',
+                name: '好评量',
                 type: 'bar',
                 data: [<%=commentList.get(0).getBadCount()%>,<%=commentList.get(1).getBadCount()%>,<%=commentList.get(2).getBadCount()%>]
             }
         ]
     };
-    bar.setOption(option);
+    bar.setOption(baroption);
+</script>
+<script type="text/javascript">
+    var hotWordLine = echarts.init(document.getElementById('hotword'));
+    var hotWordoption = {
+        title: {
+            text: '热词走势',
+            subtext: '过去一周'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: hotWordName
+        },
+
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                data: month
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: hotWordList
+    };
+    hotWordLine.setOption(hotWordoption);
 </script>
 <!--[if lt IE 9]>
 <script src="assets/plugins/respond.min.js"></script>

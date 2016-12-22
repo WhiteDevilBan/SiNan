@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/12/18.
@@ -48,12 +50,12 @@ public class CommentService {
         list.add("qq");
         list.add("Apple Store");
         List<CommentCount> result = new ArrayList();
-        for(String store:list){
+        for (String store : list) {
             parameter.setStore(store);
             List<Integer> l = commentDao.getCommentCountWithoutTime(parameter);
             CommentCount count = new CommentCount();
             count.setStore(store);
-            if(l.size()>0){
+            if (l.size() > 0) {
                 count.setGoodCount(l.get(0));
                 count.setBadCount(l.get(1));
             }
@@ -65,7 +67,7 @@ public class CommentService {
 
     public CommentCount getCommentStarCount(Parameter parameter) {
         List<Integer> starList = commentDao.getCommentStarCount(parameter);
-        if(starList.size()>5) starList.remove(0);
+        if (starList.size() > 5) starList.remove(0);
         CommentCount commentCount = new CommentCount();
         commentCount.setCount1(starList.get(0));
         commentCount.setCount2(starList.get(1));
@@ -75,7 +77,20 @@ public class CommentService {
         return commentCount;
     }
 
-    public List<FeelingEntry> getFeelingLineCount(Parameter parameter){
+    public List<FeelingEntry> getFeelingLineCount(Parameter parameter) {
         return commentDao.getFeelingLineCount(parameter);
+    }
+
+    public Map<String, List<Integer>> getHotWordCount() {
+        List<String> hotWordList = new ArrayList();
+        hotWordList.add("好玩");
+        hotWordList.add("宝箱");
+        hotWordList.add("闪退");
+        Map<String, List<Integer>> hotWordMap = new HashMap();
+        for (String hotWord : hotWordList) {
+            List<Integer> count = commentDao.getHotWordCount(hotWord);
+            hotWordMap.put(hotWord, count);
+        }
+        return hotWordMap;
     }
 }

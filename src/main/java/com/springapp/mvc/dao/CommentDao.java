@@ -2,8 +2,10 @@ package com.springapp.mvc.dao;
 
 import com.springapp.mvc.domain.Comment;
 import com.springapp.mvc.domain.FeelingEntry;
+import com.springapp.mvc.domain.HotWordCount;
 import com.springapp.mvc.domain.Parameter;
 import com.springapp.mvc.util.MyBatisRepository;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +25,6 @@ public interface CommentDao {
     List<Integer> getCommentCountWithoutTime(Parameter parameter);
 
     List<FeelingEntry> getFeelingLineCount(Parameter parameter);
+
+    List<Integer> getHotWordCount(@Param("hotWord")String hotWord);
 }
