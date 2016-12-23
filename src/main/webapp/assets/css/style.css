@@ -1247,7 +1247,7 @@ Input icons
 Portlets
 ***/
 .portlet  {
-  clear: both;
+  /*clear: both;*/
   margin-top: 0px;
   margin-bottom: 25px;
   padding: 0px;
@@ -2160,7 +2160,7 @@ Chats
 
 .chats li {
   list-style: none;
-  padding: 5px 0;
+  padding: 4px 0;
   margin: 10px auto;
   font-size: 12px;
 }
@@ -2180,13 +2180,13 @@ Chats
 
 .chats li .name {
   color:#3590c1;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
 }
 
 .chats li .datetime {
   color:#333;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -2245,7 +2245,7 @@ Chats
 
 .chats li .message .body {
   display: block;
-  font-size: 24px;
+  font-size: 16px;
 }
 
 .chat-form {

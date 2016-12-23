@@ -101,8 +101,8 @@
   </div>
   <div class="page-content">
       <div class="row">
-            <div class="col-lg-3 col-md-3">
-                <div class="form-group col-1 pull-left">
+            <div class="col-sm-4">
+                <div class="form-group col-1">
                     <form action="/subscribe/modifyHotWord.do">
                         <h3>选择监测的游戏：</h3>
                         <select class="form-control input-sm" id="gameName" style="font-size: 20px;height: 50px" name="gameName">
@@ -111,15 +111,75 @@
                             <option value="梦幻西游">梦幻西游</option>
                         </select>
                         <h3>添加您要监测的热词：(英文逗号隔开)</h3>
-                        <textarea class="form-control" name="hotWord" placeholder="输入热词，英文逗号隔开"><c:if test="${hotWordStr != null}">${hotWordStr}</c:if></textarea>
+                        <textarea class="form-control" name="hotWord" placeholder="输入热词，英文逗号隔开" style="font-size: 20px"><c:if test="${hotWordStr != null}">${hotWordStr}</c:if></textarea>
                         <input type="text" name="userName" value="Joker" hidden>
                         <input type="submit" class="btn blue  btn-bolck pull-right" value="保存更改">
                     </form>
                 </div>
             </div>
+          <div class="col-sm-2"></div>
+          <div class="portlet box blue col-lg-3 col-md-3" >
+              <div class="portlet-title">
+                  <div class="caption"><i class="fa fa-comments"></i>Top 10 热词</div>
+              </div>
+              <div class="portlet-body" style="font-size: 16px">
+                  <div class="table-responsive">
+                      <table class="table table-striped table-hover" style="margin-bottom: 0px">
+                          <thead>
+                          <tr>
+                            <th>词语</th>
+                            <th>数量</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <td>好玩</td>
+                                  <td>533</td>
+                              </tr>
+                              <tr>
+                                  <td>魅币</td>
+                                  <td>363</td>
+                              </tr>
+                              <tr>
+                                  <td>抽奖</td>
+                                  <td>88</td>
+                              </tr>
+                              <tr>
+                                  <td>30</td>
+                                  <td>85</td>
+                              </tr>
+                              <tr>
+                                  <td>不错的游戏</td>
+                                  <td>77</td>
+                              </tr>
+                              <tr>
+                                  <td>进不去</td>
+                                  <td>67</td>
+                              </tr>
+                              <tr>
+                                  <td>期待</td>
+                                  <td>65</td>
+                              </tr>
+                              <tr>
+                                  <td>开服</td>
+                                  <td>64</td>
+                              </tr>
+                              <tr>
+                                  <td>很不错</td>
+                                  <td>53</td>
+                              </tr>
+                              <tr>
+                                  <td>还好</td>
+                                  <td>48</td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
       </div>
 
-      <div class="row ">
+      <div class="row">
           <div class="col-md-6 col-sm-6" id="hotword" style="height: 530px;">
           </div>
       </div>

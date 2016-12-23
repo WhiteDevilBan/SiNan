@@ -255,7 +255,7 @@
                                                 <a href="#" class="name">${comment.author}</a>
                                                 <span class="datetime"> @ ${comment.commentTimeStr}</span>
                                                 <span class="score"
-                                                      style="float: right;font-size: 24px">${comment.score/10}星</span>
+                                                      style="float: right;font-size: 16px">${comment.score/10}星</span>
 											<span class="body">
                                                     ${comment.content}
                                             </span>
