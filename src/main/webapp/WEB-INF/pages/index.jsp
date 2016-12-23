@@ -19,22 +19,12 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <meta name="MobileOptimized" content="320">
-    <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/style.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/plugins.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
-    <link href="assets/css/custom.css" rel="stylesheet" type="text/css"/>
-    <link rel="shortcut icon" href="img/favicon.ico"/>
 
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(application);
@@ -86,7 +76,11 @@
         }
 
         List<CommentCount> commentList = service.getCommentCountWithoutTime(param);
-        Map<String,List<Integer>> map = service.getHotWordCount();
+        List<String> hotWordList = new ArrayList();
+        hotWordList.add("好玩");
+        hotWordList.add("宝箱");
+        hotWordList.add("闪退");
+        Map<String,List<Integer>> map = service.getHotWordCount(hotWordList);
 
     %>
 </head>
@@ -140,6 +134,18 @@
                 <a href="comment">
                     <i class="fa fa-comment"></i>
                     <span class="title">Comments</span>
+                </a>
+            </li>
+            <li class="">
+                <a href="subscribe">
+                    <i class="fa fa-rss-square"></i>
+                    <span class="title">Subscribe</span>
+                </a>
+            </li>
+            <li class="">
+                <a href="alert">
+                    <i class="fa fa-bell"></i>
+                    <span class="title">Alert</span>
                 </a>
             </li>
         </ul>
@@ -228,7 +234,7 @@
 </div>
 <div class="footer">
     <div class="footer-inner">
-        CopyRight by Bzz.
+        CopyRight by Bzz.View More @ <a>https://github.com/WhiteDevilBan</a>
     </div>
     <div class="footer-tools">
 			<span class="go-top">
@@ -388,53 +394,6 @@
         series: hotWordList
     };
     hotWordLine.setOption(hotWordoption);
-</script>
-<!--[if lt IE 9]>
-<script src="assets/plugins/respond.min.js"></script>
-<script src="assets/plugins/excanvas.min.js"></script>
-<![endif]-->
-<script src="assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-<script src="assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js"
-        type="text/javascript"></script>
-<script src="assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
-<script src="assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
-<script src="assets/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
-<script src="assets/plugins/flot/jquery.flot.js" type="text/javascript"></script>
-<script src="assets/plugins/flot/jquery.flot.resize.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
-<script src="assets/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
-<script src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
-<script src="assets/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
-<script src="assets/plugins/fullcalendar/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.js" type="text/javascript"></script>
-<script src="assets/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
-<script src="assets/scripts/app.js" type="text/javascript"></script>
-<script src="assets/scripts/index.js" type="text/javascript"></script>
-<script src="assets/scripts/tasks.js" type="text/javascript"></script>
-<script>
-    jQuery(document).ready(function () {
-        App.init(); // initlayout and core plugins
-        Index.init();
-        Index.initJQVMAP(); // init index page's custom scripts
-        Index.initCalendar(); // init index page's custom scripts
-        Index.initCharts(); // init index page's custom scripts
-        Index.initChat();
-        Index.initMiniCharts();
-        Index.initDashboardDaterange();
-        Index.initIntro();
-        Tasks.initDashboardWidget();
-    });
 </script>
 </body>
 </html>

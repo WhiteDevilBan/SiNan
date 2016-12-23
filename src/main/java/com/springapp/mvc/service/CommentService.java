@@ -1,6 +1,7 @@
 package com.springapp.mvc.service;
 
 import com.springapp.mvc.dao.CommentDao;
+import com.springapp.mvc.dao.SubscribeDao;
 import com.springapp.mvc.domain.Comment;
 import com.springapp.mvc.domain.CommentCount;
 import com.springapp.mvc.domain.FeelingEntry;
@@ -22,6 +23,8 @@ public class CommentService {
 
     @Autowired
     private CommentDao commentDao;
+    @Autowired
+    private SubscribeDao subscribeDao;
 
     public int getCommentCount(Parameter param) {
         return commentDao.getCommentCount(param);
@@ -81,11 +84,7 @@ public class CommentService {
         return commentDao.getFeelingLineCount(parameter);
     }
 
-    public Map<String, List<Integer>> getHotWordCount() {
-        List<String> hotWordList = new ArrayList();
-        hotWordList.add("好玩");
-        hotWordList.add("宝箱");
-        hotWordList.add("闪退");
+    public Map<String, List<Integer>> getHotWordCount(List<String> hotWordList) {
         Map<String, List<Integer>> hotWordMap = new HashMap();
         for (String hotWord : hotWordList) {
             List<Integer> count = commentDao.getHotWordCount(hotWord);

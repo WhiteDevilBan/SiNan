@@ -2,4 +2,4 @@
 Sinan.iml
 target
 .idea
-*webapp/img/
+src/main/webapp/img
