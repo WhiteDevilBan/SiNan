@@ -22,8 +22,8 @@ var TableEditable = function () {
                 jqTds[1].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[1] + '">';
                 jqTds[2].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[2] + '">';
                 jqTds[3].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[3] + '">';
-                jqTds[4].innerHTML = '<a class="edit" href="">Save</a>';
-                jqTds[5].innerHTML = '<a class="cancel" href="">Cancel</a>';
+                jqTds[4].innerHTML = '<a class="edit" href="">保存</a>';
+                jqTds[5].innerHTML = '<a class="cancel" href="">取消</a>';
             }
 
             function saveRow(oTable, nRow) {
@@ -32,9 +32,11 @@ var TableEditable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4, false);
-                oTable.fnUpdate('<a class="delete" href="">Delete</a>', nRow, 5, false);
+                oTable.fnUpdate('<a class="edit" href="">编辑</a>', nRow, 4, false);
+                oTable.fnUpdate('<a class="delete" href="">删除</a>', nRow, 5, false);
                 oTable.fnDraw();
+            //    保存，完成后调用保存接口
+            //    更新，判断是否有id调用不同接口
             }
 
             function cancelEditRow(oTable, nRow) {
@@ -43,7 +45,7 @@ var TableEditable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4, false);
+                oTable.fnUpdate('<a class="edit" href="">编辑</a>', nRow, 4, false);
                 oTable.fnDraw();
             }
 
@@ -88,6 +90,7 @@ var TableEditable = function () {
                 nEditing = nRow;
             });
 
+            //删除
             $('#sample_editable_1 a.delete').live('click', function (e) {
                 e.preventDefault();
 
@@ -97,6 +100,7 @@ var TableEditable = function () {
 
                 var nRow = $(this).parents('tr')[0];
                 oTable.fnDeleteRow(nRow);
+                //删除完成，调用删除接口
                 alert("Deleted! Do not forget to do some ajax to sync with backend :)");
             });
 
@@ -111,6 +115,7 @@ var TableEditable = function () {
                 }
             });
 
+            //编辑
             $('#sample_editable_1 a.edit').live('click', function (e) {
                 e.preventDefault();
 
@@ -122,8 +127,8 @@ var TableEditable = function () {
                     restoreRow(oTable, nEditing);
                     editRow(oTable, nRow);
                     nEditing = nRow;
-                } else if (nEditing == nRow && this.innerHTML == "Save") {
-                    /* Editing this row and want to save it */
+                } else if (nEditing == nRow && this.innerHTML == "保存") {
+                    /* 新建 */
                     saveRow(oTable, nEditing);
                     nEditing = null;
                     alert("Updated! Do not forget to do some ajax to sync with backend :)");

@@ -1,10 +1,3 @@
-<%@ page import="com.springapp.mvc.domain.Comment" %>
-<%@ page import="com.springapp.mvc.domain.CommentCount" %>
-<%@ page import="com.springapp.mvc.domain.Parameter" %>
-<%@ page import="com.springapp.mvc.service.CommentService" %>
-<%@ page import="com.springapp.mvc.util.DateUtil" %>
-<%@ page import="org.springframework.context.ApplicationContext" %>
-<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
