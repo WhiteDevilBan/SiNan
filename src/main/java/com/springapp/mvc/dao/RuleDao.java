@@ -13,9 +13,9 @@ import java.util.List;
 public interface RuleDao {
     List<Rule> getAllRule();
 
-    void addRule(Rule rule);
+    void addRule(@Param("rule")Rule rule);
 
-    void updateRule(Rule rule);
+    void updateRule(@Param("rule")Rule rule);
 
     void deleteRule(@Param("id")int id);
 }

@@ -30,7 +30,7 @@
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(application);
         RuleService service = context.getBean(RuleService.class);
-//        List<Rule> ruleList = service.getAllRule();
+        List<Rule> ruleList = service.getAllRule();
 //        request.setAttribute();
     %>
 </head>
@@ -74,7 +74,7 @@
         <!-- 隐藏菜单 -->
         <div class="sidebar-toggler hidden-phone"></div>
       </li>
-      <li class="start active ">
+      <li class="">
         <a href="/index">
           <i class="fa fa-home"></i>
           <span class="title">Dashboard</span>
@@ -94,7 +94,7 @@
           <span class="title">Subscribe</span>
         </a>
       </li>
-      <li class="">
+      <li class="start active">
         <a href="/alert">
           <i class="fa fa-bell"></i>
           <span class="title">Alert</span>
@@ -104,60 +104,62 @@
   </div>
   <div class="page-content">
 
-      <div class="col-md-6">
-
-          <!-- BEGIN EXAMPLE TABLE PORTLET-->
+      <div class="col-md-8 row">
           <div class="portlet box blue">
               <div class="portlet-title">
-                  <div class="caption"><i class="fa fa-edit"></i>规则列表</div>
+                  <div class="caption"><i class="fa fa-edit"></i>报警规则列表</div>
               </div>
               <div class="portlet-body">
-                  <form action="/rule/updateRule.do">
                   <div class="table-toolbar">
                       <div class="btn-group">
                           <button id="sample_editable_1_new" class="btn green">
                               添加新规则 <i class="fa fa-plus"></i>
                           </button>
                       </div>
-                      <div class="btn-group pull-right">
-                          <input type="submit" class="btn red  btn-bolck pull-right" value="更新规则列表">
-                      </div>
                   </div>
                   <table class="table table-striped " id="sample_editable_1">
                       <thead>
                       <tr>
+                          <th>游戏名</th>
                           <th>类型(评论数 or 热词数 or 负面评论数)</th>
                           <th>大于或小于(> or <)</th>
                           <th>数量</th>
                           <th>警报类型</th>
                           <th>编辑</th>
                           <th>删除</th>
+                          <th hidden>ID</th>
                       </tr>
                       </thead>
                       <tbody>
-                      <tr>
-                          <td>
-                              评论数
-                          </td>
-                          <td>
-                             <
-                          </td>
-                          <td>21</td>
-                          <td class="center">warning</td>
-                          <td><a class="edit" href="javascript:;">编辑</a></td>
-                          <td><a class="delete" href="javascript:;">删除</a></td>
-                      </tr>
-                      <tr>
-                          <td>负面评论数</td>
-                          <td>></td>
-                          <td>49</td>
-                          <td class="center">error</td>
-                          <td><a class="edit" href="javascript:;">编辑</a></td>
-                          <td><a class="delete" href="javascript:;">删除</a></td>
-                      </tr>
+                      <c:forEach items="<%=ruleList%>" var="rule">
+                          <tr>
+                              <td>${rule.gameName}</td>
+                              <td>
+                                  ${rule.method}
+                              </td>
+                              <td>
+                                  ${rule.ml}
+                              </td>
+                              <td>${rule.count}</td>
+                              <td class="center">${rule.type}</td>
+                              <td><a class="edit" href="javascript:;">编辑</a></td>
+                              <td><a class="delete" href="javascript:;">删除</a></td>
+                              <td class="ruleId" hidden>${rule.id}</td>
+                          </tr>
+                      </c:forEach>
                       </tbody>
                   </table>
-                  </form>
+              </div>
+          </div>
+      </div>
+
+      <div class="row" >
+          <div class="col-md-8" style="height: 500px;">
+              <div class="alert alert-success">
+                  您所制定的规则：皇室战争 评论数 > 220 报警类型为:info 现已超出阈值，值为：1472
+              </div>
+              <div class="alert alert-danger">
+                  您所制定的规则：梦幻西游 闪退 > 10 报警类型为:error 现已超出阈值，值为：12
               </div>
           </div>
       </div>

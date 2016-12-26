@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.springapp.mvc.dao.TaskDao">
+
+    <select id="getYesCommentCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) from comment
+        where comment_time BETWEEN CURRENT_DATE - 1 and CURRENT_DATE and game_id in (select id from games where game_name = #{gameName})
+    </select>
+
+    <select id="getFeelCommentCount" parameterType="map" resultType="java.lang.Integer">
+        SELECT count(1) from comment
+        WHERE comment_time BETWEEN CURRENT_DATE - 1 and CURRENT_DATE and type = #{type} AND game_id in (select id from games where game_name = #{gameName})
+    </select>
+
+    <select id="getWordCount" parameterType="map" resultType="java.lang.Integer">
+        SELECT count(1) from comment
+        WHERE comment_time BETWEEN CURRENT_DATE - 1 and CURRENT_DATE and game_id in (select id from games where game_name = #{gameName})
+        and content like concat('%',#{word},'%')
+    </select>
+</mapper>

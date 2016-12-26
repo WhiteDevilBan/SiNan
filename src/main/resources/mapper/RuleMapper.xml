@@ -4,7 +4,7 @@
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="com.springapp.mvc.dao.RuleDao">
 
-    <insert id="addRule" parameterType="com.springapp.mvc.domain.Rule" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addRule" parameterType="com.springapp.mvc.domain.Rule" useGeneratedKeys="true">
         INSERT INTO rule(user_name,game_name,method,ml,count,type)
         VALUES (#{rule.userName},#{rule.gameName},#{rule.method},#{rule.ml},#{rule.count},#{rule.type})
     </insert>
@@ -23,4 +23,16 @@
     <delete id="deleteRule" parameterType="java.lang.Integer">
         DELETE FROM rule WHERE id = #{id}
     </delete>
+
+    <select id="getAllRule" resultType="com.springapp.mvc.domain.Rule">
+        SELECT
+        id as id,
+        user_name as userName,
+        game_name as gameName,
+        method as method,
+        ml as ml,
+        count as count,
+        type as type
+        FROM rule
+    </select>
 </mapper>

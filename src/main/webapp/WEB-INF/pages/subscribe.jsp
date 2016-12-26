@@ -64,7 +64,7 @@
         <!-- 隐藏菜单 -->
         <div class="sidebar-toggler hidden-phone"></div>
       </li>
-      <li class="start active ">
+      <li class="">
         <a href="/index">
           <i class="fa fa-home"></i>
           <span class="title">Dashboard</span>
@@ -78,7 +78,7 @@
           <span class="title">Comments</span>
         </a>
       </li>
-      <li class="">
+      <li class="start active">
         <a href="/subscribe">
           <i class="fa fa-rss-square"></i>
           <span class="title">Subscribe</span>

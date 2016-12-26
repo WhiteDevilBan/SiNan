@@ -22,8 +22,9 @@ var TableEditable = function () {
                 jqTds[1].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[1] + '">';
                 jqTds[2].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[2] + '">';
                 jqTds[3].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[3] + '">';
-                jqTds[4].innerHTML = '<a class="edit" href="">保存</a>';
-                jqTds[5].innerHTML = '<a class="cancel" href="">取消</a>';
+                jqTds[4].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[4] + '">';
+                jqTds[5].innerHTML = '<a class="edit" href="">保存</a>';
+                jqTds[6].innerHTML = '<a class="cancel" href="">取消</a>';
             }
 
             function saveRow(oTable, nRow) {
@@ -32,11 +33,33 @@ var TableEditable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a class="edit" href="">编辑</a>', nRow, 4, false);
-                oTable.fnUpdate('<a class="delete" href="">删除</a>', nRow, 5, false);
+                oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
+                oTable.fnUpdate('<a class="edit" href="">编辑</a>', nRow, 5, false);
+                oTable.fnUpdate('<a class="delete" href="">删除</a>', nRow, 6, false);
                 oTable.fnDraw();
-            //    保存，完成后调用保存接口
-            //    更新，判断是否有id调用不同接口
+                var data = oTable.fnGetData(nRow);
+                if(data[7] == null || data[7] == "") {
+                    //    保存，完成后调用保存接口
+                    $.get("/rule/updateRule.do?op=add",{
+                        userName:"Joker",
+                        gameName:data[0],
+                        method:data[1],
+                        ml:data[2],
+                        count:data[3],
+                        type:data[4]
+                    });
+                } else{
+                    //    更新，判断是否有id调用不同接口
+                    $.get("/rule/updateRule.do?op=update",{
+                        userName:"Joker",
+                        gameName:data[0],
+                        method:data[1],
+                        ml:data[2],
+                        count:data[3],
+                        type:data[4],
+                        id:data[7]
+                    })
+                }
             }
 
             function cancelEditRow(oTable, nRow) {
@@ -45,7 +68,8 @@ var TableEditable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a class="edit" href="">编辑</a>', nRow, 4, false);
+                oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
+                oTable.fnUpdate('<a class="edit" href="">编辑</a>', nRow, 5, false);
                 oTable.fnDraw();
             }
 
@@ -82,8 +106,8 @@ var TableEditable = function () {
 
             $('#sample_editable_1_new').click(function (e) {
                 e.preventDefault();
-                var aiNew = oTable.fnAddData(['', '', '', '',
-                        '<a class="edit" href="">Edit</a>', '<a class="cancel" data-mode="new" href="">Cancel</a>'
+                var aiNew = oTable.fnAddData(['', '', '', '','',
+                        '<a class="edit" href="javascript:;">Edit</a>', '<a class="cancel" data-mode="new" href="javascript:;">Cancel</a>',''
                 ]);
                 var nRow = oTable.fnGetNodes(aiNew[0]);
                 editRow(oTable, nRow);
@@ -99,9 +123,10 @@ var TableEditable = function () {
                 }
 
                 var nRow = $(this).parents('tr')[0];
+                var data = oTable.fnGetData(nRow);
                 oTable.fnDeleteRow(nRow);
                 //删除完成，调用删除接口
-                alert("Deleted! Do not forget to do some ajax to sync with backend :)");
+                $.get("/rule/updateRule.do?op=delete",{id:data[7]});
             });
 
             $('#sample_editable_1 a.cancel').live('click', function (e) {
@@ -131,7 +156,6 @@ var TableEditable = function () {
                     /* 新建 */
                     saveRow(oTable, nEditing);
                     nEditing = null;
-                    alert("Updated! Do not forget to do some ajax to sync with backend :)");
                 } else {
                     /* No edit in progress - let's start one */
                     editRow(oTable, nRow);

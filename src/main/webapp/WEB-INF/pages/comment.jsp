@@ -124,7 +124,7 @@
                 <!-- 隐藏菜单 -->
                 <div class="sidebar-toggler hidden-phone"></div>
             </li>
-            <li class="start active ">
+            <li class="">
                 <a href="index">
                     <i class="fa fa-home"></i>
                     <span class="title">Dashboard</span>
@@ -132,7 +132,7 @@
                 </a>
             </li>
 
-            <li class="">
+            <li class="start active">
                 <a href="comment">
                     <i class="fa fa-comments"></i>
                     <span class="title">Comments</span>
